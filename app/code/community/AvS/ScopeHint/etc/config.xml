@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<config>
+
+	<modules>
+		<AvS_ScopeHint>
+			<version>0.1.0</version>
+		</AvS_ScopeHint>
+	</modules>
+
+    <global>
+        <helpers>
+            <scopehint>
+                <class>AvS_ScopeHint_Helper</class>
+            </scopehint>
+        </helpers>
+
+        <blocks>
+            <adminhtml>
+                <rewrite>
+                    <system_config_form_field>AvS_ScopeHint_Block_AdminhtmlBlockSystemConfigFormField</system_config_form_field>
+                </rewrite>
+            </adminhtml>
+        </blocks>
+    </global>
+
+    <adminhtml>
+        <translate>
+            <modules>
+                <AvS_ScopeHint>
+                    <files>
+                        <default>AvS_ScopeHint.csv</default>
+                    </files>
+                </AvS_ScopeHint>
+            </modules>
+        </translate>
+        <layout>
+            <updates>
+                <scopehint>
+                    <file>scopehint.xml</file>
+                </scopehint>
+            </updates>
+        </layout>
+    </adminhtml>
+</config>
