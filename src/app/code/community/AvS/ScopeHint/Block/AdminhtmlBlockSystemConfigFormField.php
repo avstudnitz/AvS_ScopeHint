@@ -212,6 +212,12 @@ class AvS_ScopeHint_Block_AdminhtmlBlockSystemConfigFormField
         $scope1ConfigValue = $this->_getConfig($scope1, $configCode);
         $scope2ConfigValue = $this->_getConfig($scope2, $configCode);
 
+        if ($scope1ConfigValue != $scope2ConfigValue) {
+            Mage::log('$configCode: ' . $configCode);
+            Mage::log(get_class($scope1) . ' ' . $scope1ConfigValue);
+            Mage::log(get_class($scope2) . ' ' . $scope2ConfigValue);
+        }
+
         return ($scope1ConfigValue != $scope2ConfigValue);
     }
 
@@ -235,9 +241,12 @@ class AvS_ScopeHint_Block_AdminhtmlBlockSystemConfigFormField
         }
     }
 
-
-    protected function _getHintHtml($changedScopes) {
-
+    /**
+     * @param array $changedScopes
+     * @return string
+     */
+    protected function _getHintHtml($changedScopes)
+    {
         $text = Mage::helper('scopehint')->__('Changes in:') . '<br />';
 
         $text .= implode('<br />', $changedScopes);
@@ -254,7 +263,6 @@ class AvS_ScopeHint_Block_AdminhtmlBlockSystemConfigFormField
      */
     protected function _getFullStoreName($store)
     {
-
         if (!isset($this->_fullStoreNames[$store->getId()])) {
 
             $fullStoreName = $store->getWebsite()->getName()
@@ -270,7 +278,6 @@ class AvS_ScopeHint_Block_AdminhtmlBlockSystemConfigFormField
      */
     protected function _isGlobalScope()
     {
-
         return (!$this->_isWebsiteScope() && !$this->_isStoreScope());
     }
 
@@ -279,7 +286,6 @@ class AvS_ScopeHint_Block_AdminhtmlBlockSystemConfigFormField
      */
     protected function _isWebsiteScope()
     {
-
         return (Mage::app()->getRequest()->getParam('website') && !$this->_isStoreScope());
     }
 
@@ -288,7 +294,6 @@ class AvS_ScopeHint_Block_AdminhtmlBlockSystemConfigFormField
      */
     protected function _isStoreScope()
     {
-
         return ((bool)Mage::app()->getRequest()->getParam('store'));
     }
 
@@ -297,7 +302,6 @@ class AvS_ScopeHint_Block_AdminhtmlBlockSystemConfigFormField
      */
     protected function getWebsite()
     {
-
         $websiteCode = Mage::app()->getRequest()->getParam('website');
         return Mage::app()->getWebsite($websiteCode);
     }
