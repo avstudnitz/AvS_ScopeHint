@@ -218,12 +218,6 @@ class AvS_ScopeHint_Block_AdminhtmlBlockSystemConfigFormField
         $scope1ConfigValue = $this->_getConfigValue($scope1, $element);
         $scope2ConfigValue = $this->_getConfigValue($scope2, $element);
 
-        if ($scope1ConfigValue != $scope2ConfigValue) {
-            Mage::log('$configCode: ' . $this->_getConfigCode($element));
-            Mage::log(get_class($scope1) . ' ' . $scope1ConfigValue);
-            Mage::log(get_class($scope2) . ' ' . $scope2ConfigValue);
-        }
-
         return ($scope1ConfigValue != $scope2ConfigValue);
     }
 
