@@ -183,7 +183,7 @@ class AvS_ScopeHint_Block_AdminhtmlBlockSystemConfigFormField
         foreach (Mage::app()->getWebsites() as $website) {
 
             /** @var Mage_Core_Model_Website $website */
-            if ($this->_isConfigurationValueChanged($configCode, $website, null)) {
+            if ($this->_isConfigurationValueChanged($configCode, $website)) {
 
                 $changedScopes[] = Mage::helper('scopehint')->__('Website: %s', $website->getName());
             }
@@ -203,22 +203,38 @@ class AvS_ScopeHint_Block_AdminhtmlBlockSystemConfigFormField
 
     /**
      * @param string $configCode
-     * @param Mage_Core_Model_Store|Mage_Core_Model_Store $scope1
+     * @param Mage_Core_Model_Store|Mage_Core_Model_Website $scope1
      * @param Mage_Core_Model_Website|null $scope2
      * @return bool
      */
-    protected function _isConfigurationValueChanged($configCode, $scope1, $scope2)
+    protected function _isConfigurationValueChanged($configCode, $scope1, $scope2 = null)
     {
-        $scope1ConfigValue = $scope1->getConfig($configCode);
-        if (!is_null($scope2)) {
-            $scope2ConfigValue = $scope2->getConfig($configCode);
-        } else {
-            $scope2ConfigValue = Mage::getStoreConfig($configCode);
-            Mage::log($configCode . ': ' . $scope2ConfigValue);
-        }
+        $scope1ConfigValue = $this->_getConfig($scope1, $configCode);
+        $scope2ConfigValue = $this->_getConfig($scope2, $configCode);
 
         return ($scope1ConfigValue != $scope2ConfigValue);
     }
+
+    /**
+     * @param Mage_Core_Model_Store|Mage_Core_Model_Website|null $scope
+     * @param string $configCode
+     * @return string
+     */
+    protected function _getConfig($scope, $configCode)
+    {
+        if (is_null($scope)) {
+            return (string)Mage::getConfig()->getNode('default/'.$configCode);
+        } else {
+            if ($scope instanceof Mage_Core_Model_Store) {
+
+                return (string)Mage::getConfig()->getNode('stores/'.$scope->getCode().'/'.$configCode);
+            } else if ($scope instanceof Mage_Core_Model_Website) {
+
+                return (string)Mage::getConfig()->getNode('websites/'.$scope->getCode().'/'.$configCode);
+            }
+        }
+    }
+
 
     protected function _getHintHtml($changedScopes) {
 
