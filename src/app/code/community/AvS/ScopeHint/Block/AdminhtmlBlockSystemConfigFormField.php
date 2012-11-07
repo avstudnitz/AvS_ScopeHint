@@ -54,8 +54,15 @@ class AvS_ScopeHint_Block_AdminhtmlBlockSystemConfigFormField
             }
         }
 
-        $html .= '<td class="value">';
-        $html .= $this->_getElementHtml($element);
+        if ($element->getTooltip()) {
+            $html .= '<td class="value with-tooltip">';
+            $html .= $this->_getElementHtml($element);
+            $html .= '<div class="field-tooltip"><div>' . $element->getTooltip() . '</div></div>';
+        } else {
+            $html .= '<td class="value">';
+            $html .= $this->_getElementHtml($element);
+        };
+
         if ($element->getComment()) {
             $html .= '<p class="note"><span>' . $element->getComment() . '</span></p>';
         }
@@ -116,19 +123,18 @@ class AvS_ScopeHint_Block_AdminhtmlBlockSystemConfigFormField
     protected function _getScopeHint($element)
     {
         $changedScopes = array();
-        $configCode = $this->_getConfigCode($element);
 
         if ($this->_isStoreScope()) return '';
 
         if ($this->_isWebsiteScope()) {
 
             $website = $this->getWebsite();
-            $changedScopes = $this->_getChangedStoresForWebsite($configCode, $website);
+            $changedScopes = $this->_getChangedStoresForWebsite($element, $website);
         }
 
         if ($this->_isGlobalScope()) {
 
-            $changedScopes = $this->_getChangedScopesForGlobal($configCode);
+            $changedScopes = $this->_getChangedScopesForGlobal($element);
         }
 
         if (empty($changedScopes)) return '';
@@ -153,47 +159,47 @@ class AvS_ScopeHint_Block_AdminhtmlBlockSystemConfigFormField
     }
 
     /**
-     * @param string $configCode
+     * @param Varien_Data_Form_Element_Abstract $element
      * @param Mage_Core_Model_Website $website
      * @return array
      */
-    protected function _getChangedStoresForWebsite($configCode, $website)
+    protected function _getChangedStoresForWebsite($element, $website)
     {
         $changedStores = array();
 
         foreach ($website->getStores() as $store) {
 
             /** @var Mage_Core_Model_Store $store */
-            if ($this->_isConfigurationValueChanged($configCode, $store, $website)) {
+            if ($this->_isConfigurationValueChanged($element, $store, $website)) {
 
-                $changedStores[] = Mage::helper('scopehint')->__('Store View: %s', $this->_getFullStoreName($store));
+                $changedStores[Mage::helper('scopehint')->__('Store View: %s', $this->_getFullStoreName($store))] = $this->_getReadableConfigValue($store, $element);
             }
         }
         return $changedStores;
     }
 
     /**
-     * @param string $configCode
+     * @param Varien_Data_Form_Element_Abstract $element
      * @return array
      */
-    protected function _getChangedScopesForGlobal($configCode)
+    protected function _getChangedScopesForGlobal($element)
     {
         $changedScopes = array();
 
         foreach (Mage::app()->getWebsites() as $website) {
 
             /** @var Mage_Core_Model_Website $website */
-            if ($this->_isConfigurationValueChanged($configCode, $website)) {
+            if ($this->_isConfigurationValueChanged($element, $website)) {
 
-                $changedScopes[] = Mage::helper('scopehint')->__('Website: %s', $website->getName());
+                $changedScopes[Mage::helper('scopehint')->__('Website: %s', $website->getName())] = $this->_getReadableConfigValue($website, $element);
             }
 
             foreach ($website->getStores() as $store) {
 
                 /** @var Mage_Core_Model_Store $store */
-                if ($this->_isConfigurationValueChanged($configCode, $store, $website)) {
+                if ($this->_isConfigurationValueChanged($element, $store, $website)) {
 
-                    $changedScopes[] = Mage::helper('scopehint')->__('Store View: %s', $this->_getFullStoreName($store));
+                    $changedScopes[Mage::helper('scopehint')->__('Store View: %s', $this->_getFullStoreName($store))] = $this->_getReadableConfigValue($store, $element);
                 }
             }
         }
@@ -202,18 +208,18 @@ class AvS_ScopeHint_Block_AdminhtmlBlockSystemConfigFormField
     }
 
     /**
-     * @param string $configCode
+     * @param Varien_Data_Form_Element_Abstract $element
      * @param Mage_Core_Model_Store|Mage_Core_Model_Website $scope1
      * @param Mage_Core_Model_Website|null $scope2
      * @return bool
      */
-    protected function _isConfigurationValueChanged($configCode, $scope1, $scope2 = null)
+    protected function _isConfigurationValueChanged($element, $scope1, $scope2 = null)
     {
-        $scope1ConfigValue = $this->_getConfig($scope1, $configCode);
-        $scope2ConfigValue = $this->_getConfig($scope2, $configCode);
+        $scope1ConfigValue = $this->_getConfigValue($scope1, $element);
+        $scope2ConfigValue = $this->_getConfigValue($scope2, $element);
 
         if ($scope1ConfigValue != $scope2ConfigValue) {
-            Mage::log('$configCode: ' . $configCode);
+            Mage::log('$configCode: ' . $this->_getConfigCode($element));
             Mage::log(get_class($scope1) . ' ' . $scope1ConfigValue);
             Mage::log(get_class($scope2) . ' ' . $scope2ConfigValue);
         }
@@ -223,11 +229,13 @@ class AvS_ScopeHint_Block_AdminhtmlBlockSystemConfigFormField
 
     /**
      * @param Mage_Core_Model_Store|Mage_Core_Model_Website|null $scope
-     * @param string $configCode
+     * @param Varien_Data_Form_Element_Abstract $element
      * @return string
      */
-    protected function _getConfig($scope, $configCode)
+    protected function _getConfigValue($scope, $element)
     {
+        $configCode = $this->_getConfigCode($element);
+
         if (is_null($scope)) {
             return (string)Mage::getConfig()->getNode('default/'.$configCode);
         } else {
@@ -242,6 +250,38 @@ class AvS_ScopeHint_Block_AdminhtmlBlockSystemConfigFormField
     }
 
     /**
+     * @param Mage_Core_Model_Store|Mage_Core_Model_Website|null $scope
+     * @param Varien_Data_Form_Element_Abstract $element
+     * @return string
+     */
+    protected function _getReadableConfigValue($scope, $element)
+    {
+        $rawValue = $this->_getConfigValue($scope, $element);
+        $values = $element->getValues();
+        if ($element->getType() == 'select') {
+
+            if ($element->getExtType() == 'multiple') {
+
+                $readableValues = array();
+                $rawValues = explode(',', $rawValue);
+                foreach($values as $value) {
+                    if (in_array($value['value'], $rawValues)) {
+                        $readableValues[] = $value['label'];
+                    }
+                }
+                return implode(', ', $readableValues);
+            } else {
+                foreach($values as $value) {
+                    if ($value['value'] == $rawValue) {
+                        return $value['label'];
+                    }
+                }
+            }
+        }
+        return $rawValue;
+    }
+
+    /**
      * @param array $changedScopes
      * @return string
      */
@@ -249,7 +289,10 @@ class AvS_ScopeHint_Block_AdminhtmlBlockSystemConfigFormField
     {
         $text = Mage::helper('scopehint')->__('Changes in:') . '<br />';
 
-        $text .= implode('<br />', $changedScopes);
+        foreach($changedScopes as $scope => $scopeValue) {
+
+            $text .= $scope . ': ' . $scopeValue . '<br />';
+        }
 
         $iconurl = Mage::getBaseUrl('skin') . 'adminhtml/default/default/images/error_msg_icon.gif';
         $html = '<img class="scopehint-icon" src="' . $iconurl . '" title="' . $text . '" alt="' . $text . '"/>';
