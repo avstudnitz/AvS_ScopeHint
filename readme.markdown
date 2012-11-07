@@ -16,6 +16,7 @@ Description
 -----------
 Whenever a configuration setting is overwritten by a lower level website or store view, an icon is displayed.
 On Mouseover, a list of all stores / websites which overwrite the setting is shown with the respective values.
+See the [screenshot](http://www.avs-webentwicklung.de/fileadmin/modules/AvS_ScopeHint.png) to get an overview about what the module does.
 
 Requirements
 ------------
@@ -46,7 +47,9 @@ Any contribution is highly appreciated. The best way to contribute code is to op
 Developer
 ---------
 Andreas von Studnitz
+
 [http://www.avs-webentwicklung.de](http://www.avs-webentwicklung.de)
+
 [@avstudnitz](https://twitter.com/avstudnitz)
 
 Licence
