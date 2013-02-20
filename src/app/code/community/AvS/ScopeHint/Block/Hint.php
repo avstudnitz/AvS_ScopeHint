@@ -1,29 +1,16 @@
 <?php
+/**
+ * @method Varien_Data_Form_Element_Abstract getElement()
+ * @method AvS_ScopeHint_Block_Hint setElement(Varien_Data_Form_Element_Abstract $element)
+ * @method string getType()
+ * @method AvS_ScopeHint_Block_Hint setType(string $type)
+ */
+
 class AvS_ScopeHint_Block_Hint extends Mage_Adminhtml_Block_Abstract
 {
-    /** @var Varien_Data_Form_Element_Abstract */
-    protected $_element = null;
 
     /** @var array */
     protected $_fullStoreNames = array();
-
-    /**
-     * @param Varien_Data_Form_Element_Abstract $element
-     * @return AvS_ScopeHint_Block_Hint
-     */
-    public function setElement($element)
-    {
-        $this->_element = $element;
-        return $this;
-    }
-
-    /**
-     * @return Varien_Data_Form_Element_Abstract
-     */
-    public function getElement()
-    {
-        return $this->_element;
-    }
 
     /**
      * @return string
@@ -76,7 +63,7 @@ class AvS_ScopeHint_Block_Hint extends Mage_Adminhtml_Block_Abstract
         foreach ($website->getStores() as $store) {
 
             /** @var Mage_Core_Model_Store $store */
-            if ($this->_isConfigurationValueChanged($store, $website)) {
+            if ($this->_isValueChanged($store, $website)) {
 
                 $changedStores[Mage::helper('scopehint')->__('Store View: %s', $this->_getFullStoreName($store))] = $this->_getReadableConfigValue($store, $element);
             }
@@ -91,22 +78,39 @@ class AvS_ScopeHint_Block_Hint extends Mage_Adminhtml_Block_Abstract
     {
         $changedScopes = array();
 
-        foreach (Mage::app()->getWebsites() as $website) {
+        switch ($this->getType()) {
+            case 'config':
 
-            /** @var Mage_Core_Model_Website $website */
-            if ($this->_isConfigurationValueChanged($website)) {
+                foreach (Mage::app()->getWebsites() as $website) {
 
-                $changedScopes[Mage::helper('scopehint')->__('Website: %s', $website->getName())] = $this->_getReadableConfigValue($website);
-            }
+                    /** @var Mage_Core_Model_Website $website */
+                    if ($this->_isValueChanged($website)) {
 
-            foreach ($website->getStores() as $store) {
+                        $changedScopes[Mage::helper('scopehint')->__('Website: %s', $website->getName())] = $this->_getReadableConfigValue($website);
+                    }
 
-                /** @var Mage_Core_Model_Store $store */
-                if ($this->_isConfigurationValueChanged($store, $website)) {
+                    foreach ($website->getStores() as $store) {
 
-                    $changedScopes[Mage::helper('scopehint')->__('Store View: %s', $this->_getFullStoreName($store))] = $this->_getReadableConfigValue($store);
+                        /** @var Mage_Core_Model_Store $store */
+                        if ($this->_isValueChanged($store, $website)) {
+
+                            $changedScopes[Mage::helper('scopehint')->__('Store View: %s', $this->_getFullStoreName($store))] = $this->_getReadableConfigValue($store);
+                        }
+                    }
                 }
-            }
+                break;
+
+            case 'product':
+
+                foreach (Mage::app()->getStores() as $store) {
+
+                    /** @var Mage_Core_Model_Store $store */
+                    if ($this->_isValueChanged($store)) {
+
+                        $changedScopes[Mage::helper('scopehint')->__('Store View: %s', $this->_getFullStoreName($store))] = $this->_getReadableConfigValue($store);
+                    }
+                }
+                break;
         }
 
         return $changedScopes;
@@ -117,10 +121,14 @@ class AvS_ScopeHint_Block_Hint extends Mage_Adminhtml_Block_Abstract
      * @param Mage_Core_Model_Website|null $scope2
      * @return bool
      */
-    protected function _isConfigurationValueChanged($scope1, $scope2 = null)
+    protected function _isValueChanged($scope1, $scope2 = null)
     {
-        $scope1ConfigValue = $this->_getConfigValue($scope1);
-        $scope2ConfigValue = $this->_getConfigValue($scope2);
+        if ($this->getType() != 'config' && $scope1 instanceof Mage_Core_Model_Website) {
+            // products and categories don't have a website scope
+            return false;
+        }
+        $scope1ConfigValue = $this->_getValue($scope1);
+        $scope2ConfigValue = $this->_getValue($scope2);
 
         return ($scope1ConfigValue != $scope2ConfigValue);
     }
@@ -129,20 +137,30 @@ class AvS_ScopeHint_Block_Hint extends Mage_Adminhtml_Block_Abstract
      * @param Mage_Core_Model_Store|Mage_Core_Model_Website|null $scope
      * @return string
      */
-    protected function _getConfigValue($scope)
+    protected function _getValue($scope)
     {
-        $configCode = $this->_getConfigCode();
+        switch ($this->getType()) {
 
-        if (is_null($scope)) {
-            return (string)Mage::getConfig()->getNode('default/'.$configCode);
-        } else {
-            if ($scope instanceof Mage_Core_Model_Store) {
+            case 'config':
+                $configCode = $this->_getConfigCode();
 
-                return (string)Mage::getConfig()->getNode('stores/'.$scope->getCode().'/'.$configCode);
-            } else if ($scope instanceof Mage_Core_Model_Website) {
+                if (is_null($scope)) {
+                    return (string)Mage::getConfig()->getNode('default/'.$configCode);
+                } else if ($scope instanceof Mage_Core_Model_Store) {
+                    return (string)Mage::getConfig()->getNode('stores/'.$scope->getCode().'/'.$configCode);
+                } else if ($scope instanceof Mage_Core_Model_Website) {
+                    return (string)Mage::getConfig()->getNode('websites/'.$scope->getCode().'/'.$configCode);
+                }
+                break;
 
-                return (string)Mage::getConfig()->getNode('websites/'.$scope->getCode().'/'.$configCode);
-            }
+            case 'product':
+                $attributeName = $this->getElement()->getData('name');
+                if (is_null($scope)) {
+                    return (string)Mage::getSingleton('catalog/product')->getResource()->getAttributeRawValue($this->getEntityId(), $attributeName, Mage_Core_Model_App::ADMIN_STORE_ID);
+                } else if ($scope instanceof Mage_Core_Model_Store) {
+                    return (string)Mage::getSingleton('catalog/product')->getResource()->getAttributeRawValue($this->getEntityId(), $attributeName, $scope->getId());
+                }
+                break;
         }
     }
 
@@ -152,7 +170,7 @@ class AvS_ScopeHint_Block_Hint extends Mage_Adminhtml_Block_Abstract
      */
     protected function _getReadableConfigValue($scope)
     {
-        $rawValue = $this->_getConfigValue($scope);
+        $rawValue = $this->_getValue($scope);
         $values = $this->getElement()->getValues();
         if ($this->getElement()->getType() == 'select') {
 
@@ -244,4 +262,13 @@ class AvS_ScopeHint_Block_Hint extends Mage_Adminhtml_Block_Abstract
         $websiteCode = Mage::app()->getRequest()->getParam('website');
         return Mage::app()->getWebsite($websiteCode);
     }
+
+    /**
+     * @return int
+     */
+    protected function getEntityId()
+    {
+        return intval($this->getRequest()->getParam('id'));
+    }
+
 }

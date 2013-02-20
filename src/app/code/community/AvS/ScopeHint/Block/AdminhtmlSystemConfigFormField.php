@@ -117,6 +117,7 @@ class AvS_ScopeHint_Block_AdminhtmlSystemConfigFormField
         return $this->getLayout()
             ->createBlock('scopehint/hint', 'scopehint')
             ->setElement($element)
+            ->setType('config')
             ->toHtml();
     }
 }
