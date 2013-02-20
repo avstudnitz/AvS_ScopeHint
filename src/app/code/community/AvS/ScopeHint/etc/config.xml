@@ -15,9 +15,13 @@
         </helpers>
 
         <blocks>
+            <scopehint>
+                <class>AvS_ScopeHint_Block</class>
+            </scopehint>
             <adminhtml>
                 <rewrite>
-                    <system_config_form_field>AvS_ScopeHint_Block_AdminhtmlBlockSystemConfigFormField</system_config_form_field>
+                    <system_config_form_field>AvS_ScopeHint_Block_AdminhtmlSystemConfigFormField</system_config_form_field>
+                    <catalog_form_renderer_fieldset_element>AvS_ScopeHint_Block_AdminhtmlCatalogFormRendererFieldsetElement</catalog_form_renderer_fieldset_element>
                 </rewrite>
             </adminhtml>
         </blocks>
