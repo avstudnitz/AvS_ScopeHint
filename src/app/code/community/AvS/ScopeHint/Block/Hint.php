@@ -101,6 +101,7 @@ class AvS_ScopeHint_Block_Hint extends Mage_Adminhtml_Block_Abstract
                 break;
 
             case 'product':
+            case 'category':
 
                 foreach (Mage::app()->getStores() as $store) {
 
@@ -154,11 +155,12 @@ class AvS_ScopeHint_Block_Hint extends Mage_Adminhtml_Block_Abstract
                 break;
 
             case 'product':
+            case 'category':
                 $attributeName = $this->getElement()->getData('name');
                 if (is_null($scope)) {
-                    return (string)Mage::getSingleton('catalog/product')->getResource()->getAttributeRawValue($this->getEntityId(), $attributeName, Mage_Core_Model_App::ADMIN_STORE_ID);
+                    return (string)Mage::getResourceSingleton('catalog/' . $this->getType())->getAttributeRawValue($this->getEntityId(), $attributeName, Mage_Core_Model_App::ADMIN_STORE_ID);
                 } else if ($scope instanceof Mage_Core_Model_Store) {
-                    return (string)Mage::getSingleton('catalog/product')->getResource()->getAttributeRawValue($this->getEntityId(), $attributeName, $scope->getId());
+                    return (string)Mage::getResourceSingleton('catalog/' . $this->getType())->getAttributeRawValue($this->getEntityId(), $attributeName, $scope->getId());
                 }
                 break;
         }
@@ -268,7 +270,11 @@ class AvS_ScopeHint_Block_Hint extends Mage_Adminhtml_Block_Abstract
      */
     protected function getEntityId()
     {
-        return intval($this->getRequest()->getParam('id'));
+        if ($this->getType() == 'product') {
+            return intval($this->getRequest()->getParam('id'));
+        } else {
+            return Mage::registry('current_category')->getId();
+        }
     }
 
 }

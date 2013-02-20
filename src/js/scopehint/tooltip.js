@@ -217,12 +217,19 @@ Tooltip.prototype = {
 
 }
 
-Event.observe(window, "load", function() {
+var scopehintObserver = function() {
     $$(".scopehint-icon").findAll(
-            function(node) {
-                return node.getAttribute('title');
-            }).each(function(node) {
+        function(node) {
+            return node.getAttribute('title');
+        }
+    ).each(function(node) {
         new Tooltip(node, node.title);
         node.removeAttribute("title");
     });
+};
+
+Event.observe(window, "load", scopehintObserver);
+
+Ajax.Responders.register({
+    onComplete: scopehintObserver
 });

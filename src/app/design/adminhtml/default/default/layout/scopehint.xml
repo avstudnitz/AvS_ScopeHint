@@ -11,4 +11,9 @@
             <action method="addJs"><file>scopehint/tooltip.js</file></action>
         </reference>
     </adminhtml_catalog_product_edit>
+    <adminhtml_catalog_category_edit>
+        <reference name="head">
+            <action method="addJs"><file>scopehint/tooltip.js</file></action>
+        </reference>
+    </adminhtml_catalog_category_edit>
 </layout>

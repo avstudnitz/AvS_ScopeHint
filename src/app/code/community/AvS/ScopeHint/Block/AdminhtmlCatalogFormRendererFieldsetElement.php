@@ -28,10 +28,15 @@ class AvS_ScopeHint_Block_AdminhtmlCatalogFormRendererFieldsetElement
      */
     protected function _getScopeHint($element)
     {
+        if (Mage::registry('current_category')) {
+            $type = 'category';
+        } else {
+            $type = 'product';
+        }
         return $this->getLayout()
             ->createBlock('scopehint/hint', 'scopehint')
             ->setElement($element)
-            ->setType('product')
+            ->setType($type)
             ->toHtml();
     }
 }
