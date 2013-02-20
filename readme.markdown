@@ -4,7 +4,7 @@ Displays a hint when a configuration value is overwritten on a lower scope (webs
 
 Facts
 -----
-- version: 0.1.0
+- version: 0.3.0
 - extension key: AvS_ScopeHint
 - [extension on Magento Connect](http://www.magentocommerce.com/magento-connect/scope-hint.html)
 - Magento Connect 1.0 extension key: magento-community/AvS_ScopeHint
@@ -17,6 +17,8 @@ Description
 Whenever a configuration setting is overwritten by a lower level website or store view, an icon is displayed.
 On Mouseover, a list of all stores / websites which overwrite the setting is shown with the respective values.
 See the [screenshot](http://www.avs-webentwicklung.de/fileadmin/modules/AvS_ScopeHint.png) to get an overview about what the module does.
+
+Works for category and product editing too.
 
 Requirements
 ------------
@@ -58,4 +60,4 @@ Licence
 
 Copyright
 ---------
-(c) 2012 Andreas von Studnitz
+(c) 2012-2013 Andreas von Studnitz
