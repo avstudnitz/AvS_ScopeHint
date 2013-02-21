@@ -207,7 +207,7 @@ class AvS_ScopeHint_Block_Hint extends Mage_Adminhtml_Block_Abstract
 
         foreach($changedScopes as $scope => $scopeValue) {
 
-            $text .= $scope . ': ' . $scopeValue . '<br />';
+            $text .= $this->escapeHtml($scope). ': ' .$this->escapeHtml($scopeValue) . '<br />';
         }
 
         $iconurl = Mage::getBaseUrl('skin') . 'adminhtml/default/default/images/error_msg_icon.gif';
