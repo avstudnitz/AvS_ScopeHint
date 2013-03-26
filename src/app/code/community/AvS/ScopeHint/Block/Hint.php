@@ -12,6 +12,12 @@ class AvS_ScopeHint_Block_Hint extends Mage_Adminhtml_Block_Abstract
     /** @var array */
     protected $_fullStoreNames = array();
 
+    /** @var Mage_Catalog_Model_Product[] */
+    protected $_products = array();
+
+    /** @var Mage_Catalog_Model_Category[] */
+    protected $_categories = array();
+
     /**
      * @return string
      */
@@ -155,15 +161,67 @@ class AvS_ScopeHint_Block_Hint extends Mage_Adminhtml_Block_Abstract
                 break;
 
             case 'product':
+                $attributeName = $this->getElement()->getData('name');
+                if (is_null($scope)) {
+                    return (string)$this->_getProduct()->getData($attributeName);
+                } else if ($scope instanceof Mage_Core_Model_Store) {
+                    return (string)$this->_getProduct($scope)->getData($attributeName);
+                }
+                break;
+
             case 'category':
                 $attributeName = $this->getElement()->getData('name');
                 if (is_null($scope)) {
-                    return (string)Mage::getResourceSingleton('catalog/' . $this->getType())->getAttributeRawValue($this->getEntityId(), $attributeName, Mage_Core_Model_App::ADMIN_STORE_ID);
+                    return (string)$this->_getCategory()->getData($attributeName);
                 } else if ($scope instanceof Mage_Core_Model_Store) {
-                    return (string)Mage::getResourceSingleton('catalog/' . $this->getType())->getAttributeRawValue($this->getEntityId(), $attributeName, $scope->getId());
+                    return (string)$this->_getCategory($scope)->getData($attributeName);
                 }
                 break;
         }
+    }
+
+    /**
+     * @param Mage_Core_Model_Store $store
+     * @return Mage_Catalog_Model_Product
+     */
+    protected function _getProduct(Mage_Core_Model_Store $store = null)
+    {
+        if (is_null($store)) {
+            $storeId = 0;
+        } else {
+            $storeId = $store->getId();
+        }
+
+        if (is_null(Mage::registry('product_' . $storeId))) {
+            /** @var $product Mage_Catalog_Model_Product */
+            $product = Mage::getModel('catalog/product');
+            $product->setStoreId($storeId);
+            Mage::register('product_' . $storeId, $product->load($this->getEntityId()));
+        }
+
+        return Mage::registry('product_' . $storeId);
+    }
+
+    /**
+     * @param Mage_Core_Model_Store $store
+     * @return Mage_Catalog_Model_Category
+     */
+    protected function _getCategory(Mage_Core_Model_Store $store = null)
+    {
+        if (is_null($store)) {
+            $storeId = 0;
+        } else {
+            $storeId = $store->getId();
+        }
+
+        if (is_null(Mage::registry('category_' . $storeId))) {
+            /** @var $category Mage_Catalog_Model_Category */
+            $category = Mage::getModel('catalog/category');
+            $category->setStoreId($storeId);
+            Mage::register('category_' . $storeId, $category->load($this->getEntityId()));
+        }
+
+        return Mage::registry('category_' . $storeId);
     }
 
     /**
