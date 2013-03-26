@@ -1,10 +1,11 @@
 AvS_ScopeHint
 =====================
-Displays a hint when a configuration value is overwritten on a lower scope (website or store view)
+Displays a hint when a configuration value is overwritten on a lower scope (website or store view).
+Works for product and category attributes too (as of v0.3.0)
 
 Facts
 -----
-- version: 0.3.0
+- version: 0.4.0
 - extension key: AvS_ScopeHint
 - [extension on Magento Connect](http://www.magentocommerce.com/magento-connect/scope-hint.html)
 - Magento Connect 1.0 extension key: magento-community/AvS_ScopeHint
