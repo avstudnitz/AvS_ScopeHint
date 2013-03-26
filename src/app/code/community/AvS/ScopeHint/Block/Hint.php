@@ -8,15 +8,8 @@
 
 class AvS_ScopeHint_Block_Hint extends Mage_Adminhtml_Block_Abstract
 {
-
     /** @var array */
     protected $_fullStoreNames = array();
-
-    /** @var Mage_Catalog_Model_Product[] */
-    protected $_products = array();
-
-    /** @var Mage_Catalog_Model_Category[] */
-    protected $_categories = array();
 
     /**
      * @return string
