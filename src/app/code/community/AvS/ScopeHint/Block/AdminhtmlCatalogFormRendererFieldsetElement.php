@@ -15,7 +15,7 @@ class AvS_ScopeHint_Block_AdminhtmlCatalogFormRendererFieldsetElement
         $html = parent::getScopeLabel();
 
         $html .= '<div class="scopehint" style="padding: 6px 6px 0 6px; display: inline-block;">';
-        $html .= $this->_getScopeHint($this->getElement());
+        $html .= $this->_getScopeHintHtml($this->getElement());
         $html .= '</div>';
 
 
@@ -26,7 +26,7 @@ class AvS_ScopeHint_Block_AdminhtmlCatalogFormRendererFieldsetElement
      * @param Varien_Data_Form_Element_Abstract $element
      * @return string
      */
-    protected function _getScopeHint($element)
+    protected function _getScopeHintHtml($element)
     {
         if (Mage::registry('current_category')) {
             $type = 'category';

@@ -94,10 +94,12 @@ class AvS_ScopeHint_Block_AdminhtmlSystemConfigFormField
         if ($element->getScope()) {
             $html .= $element->getScopeLabel();
         }
+        $html .= '<br />';
+        $html .= $this->_getConfigCode($element);
         $html .= '</td>';
 
         $html .= '<td class="scopehint" style="padding: 6px 6px 0 6px;">';
-        $html .= $this->_getScopeHint($element);
+        $html .= $this->_getScopeHintHtml($element);
         $html .= '</td>';
 
         $html .= '<td class="">';
@@ -112,7 +114,11 @@ class AvS_ScopeHint_Block_AdminhtmlSystemConfigFormField
         return $html;
     }
 
-    protected function _getScopeHint($element)
+    /**
+     * @param Varien_Data_Form_Element_Abstract $element
+     * @return string
+     */
+    protected function _getScopeHintHtml(Varien_Data_Form_Element_Abstract $element)
     {
         return $this->getLayout()
             ->createBlock('scopehint/hint', 'scopehint')
@@ -120,4 +126,21 @@ class AvS_ScopeHint_Block_AdminhtmlSystemConfigFormField
             ->setType('config')
             ->toHtml();
     }
+
+    /**
+     * @param Varien_Data_Form_Element_Abstract $element
+     * @return string
+     */
+    protected function _getConfigCode(Varien_Data_Form_Element_Abstract $element)
+    {
+        $configCode = preg_replace('#\[value\](\[\])?$#', '', $element->getName());
+        $configCode = str_replace('[fields]', '', $configCode);
+        $configCode = str_replace('groups[', '[', $configCode);
+        $configCode = str_replace('][', '/', $configCode);
+        $configCode = str_replace(']', '', $configCode);
+        $configCode = str_replace('[', '', $configCode);
+        $configCode = Mage::app()->getRequest()->getParam('section') . '/' . $configCode;
+        return $configCode;
+    }
+
 }

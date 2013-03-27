@@ -5,7 +5,7 @@ Works for product and category attributes too (as of v0.3.0)
 
 Facts
 -----
-- version: 0.4.0
+- version: 0.5.0
 - extension key: AvS_ScopeHint
 - [extension on Magento Connect](http://www.magentocommerce.com/magento-connect/scope-hint.html)
 - Magento Connect 1.0 extension key: magento-community/AvS_ScopeHint
@@ -20,6 +20,8 @@ On Mouseover, a list of all stores / websites which overwrite the setting is sho
 See the [screenshot](http://www.avs-webentwicklung.de/fileadmin/modules/AvS_ScopeHint.png) to get an overview about what the module does.
 
 Works for category and product editing too.
+
+Now displays the configuration code (which is used for Mage::getStoreConfig) with the configuration fields.
 
 Requirements
 ------------
