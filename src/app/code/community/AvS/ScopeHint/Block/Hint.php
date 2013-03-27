@@ -264,7 +264,7 @@ class AvS_ScopeHint_Block_Hint extends Mage_Adminhtml_Block_Abstract
                 . '<br />';
         }
 
-        $iconurl = Mage::getBaseUrl('skin') . 'adminhtml/default/default/images/error_msg_icon.gif';
+        $iconurl = Mage::getBaseUrl('skin') . 'adminhtml/default/default/images/note_msg_icon.gif';
         $html = '<img class="scopehint-icon" src="' . $iconurl . '" title="' . $text . '" alt="' . $text . '"/>';
 
         return $html;
