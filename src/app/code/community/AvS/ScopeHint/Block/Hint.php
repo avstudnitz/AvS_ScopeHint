@@ -64,7 +64,7 @@ class AvS_ScopeHint_Block_Hint extends Mage_Adminhtml_Block_Abstract
             /** @var Mage_Core_Model_Store $store */
             if ($this->_isValueChanged($store, $website)) {
 
-                $changedStores[Mage::helper('scopehint')->__('Store View: %s', $this->_getFullStoreName($store))] = $this->_getReadableConfigValue($store, $element);
+                $changedStores[Mage::helper('scopehint')->__('Store View: %s', $this->_getFullStoreName($store))] = $this->_getReadableConfigValue($store);
             }
         }
         return $changedStores;
