@@ -1,5 +1,5 @@
 {
-   "name": "avstudnitz/AvS_ScopeHint",
+   "name": "avstudnitz/scopehint",
    "type": "magento-module",
    "description": "Creates a warning if a configuration setting is overwritten on a lower level (website or store view",
    "homepage": "https://github.com/avstudnitz/AvS_ScopeHint",
