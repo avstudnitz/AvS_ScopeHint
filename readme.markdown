@@ -8,10 +8,11 @@ Facts
 - version: 0.5.0
 - extension key: AvS_ScopeHint
 - [extension on Magento Connect](http://www.magentocommerce.com/magento-connect/scope-hint.html)
-- Magento Connect 1.0 extension key: magento-community/AvS_ScopeHint
-- Magento Connect 2.0 extension key: http://connect20.magentocommerce.com/community/AvS_ScopeHint
+- Magento Connect 1.0 extension key: `magento-community/AvS_ScopeHint`
+- Magento Connect 2.0 extension key: `http://connect20.magentocommerce.com/community/AvS_ScopeHint`
 - [extension on GitHub](https://github.com/avstudnitz/AvS_ScopeHint)
 - [direct download link](https://github.com/avstudnitz/AvS_ScopeHint/archive/master.tar.gz)
+- Composer key: `avstudnitz/scopehint` (via FireGento repository)
 
 Description
 -----------
