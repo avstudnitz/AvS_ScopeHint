@@ -1,5 +1,5 @@
-src/app/etc/modules/AvS_ScopeHint.xml				app/etc/modules/AvS_ScopeHint.xml
-src/app/code/community/AvS/ScopeHint                 		app/code/community/AvS/ScopeHint
-src/app/design/adminhtml/default/default/layout/scopehint.xml	app/design/adminhtml/default/default/layout/scopehint.xml
-src/app/locale/de_DE/AvS_ScopeHint.csv				app/locale/de_DE/AvS_ScopeHint.csv
-src/js/scopehint						js/scopehint
+src/app/etc/modules/AvS_ScopeHint.xml                           app/etc/modules/AvS_ScopeHint.xml
+src/app/code/community/AvS/ScopeHint                            app/code/community/AvS/ScopeHint
+src/app/design/adminhtml/default/default/layout/scopehint.xml   app/design/adminhtml/default/default/layout/scopehint.xml
+src/app/locale/de_DE/AvS_ScopeHint.csv                          app/locale/de_DE/AvS_ScopeHint.csv
+src/js/scopehint                                                js/scopehint

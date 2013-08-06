@@ -1,11 +1,13 @@
 <?php
+/**
+ * @category   AvS
+ * @package    AvS_ScopeHint
+ * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @author     Andreas von Studnitz <avs@avs-webentwicklung.de>
+ */
 
 /**
  * Render config field; hint added when config value is overwritten in a scope below
- *
- * @category   AvS
- * @package    AvS_ScopeHint
- * @author     Andreas von Studnitz <avs@avs-webentwicklung.de>
  */
 class AvS_ScopeHint_Block_AdminhtmlSystemConfigFormField
     extends Mage_Adminhtml_Block_System_Config_Form_Field

@@ -1,5 +1,12 @@
 <?php
 /**
+ * @category   AvS
+ * @package    AvS_ScopeHint
+ * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @author     Andreas von Studnitz <avs@avs-webentwicklung.de>
+ */
+
+/**
  * @method Varien_Data_Form_Element_Abstract getElement()
  * @method AvS_ScopeHint_Block_Hint setElement(Varien_Data_Form_Element_Abstract $element)
  * @method string getType()

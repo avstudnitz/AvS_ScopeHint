@@ -1,5 +1,10 @@
 <?php
-
+/**
+ * @category   AvS
+ * @package    AvS_ScopeHint
+ * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @author     Andreas von Studnitz <avs@avs-webentwicklung.de>
+ */
 class AvS_ScopeHint_Block_AdminhtmlCatalogFormRendererFieldsetElement
     extends Mage_Adminhtml_Block_Catalog_Form_Renderer_Fieldset_Element
 {

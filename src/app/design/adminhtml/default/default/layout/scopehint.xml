@@ -1,5 +1,12 @@
 <?xml version="1.0"?>
-
+<!--
+/**
+ * @category   AvS
+ * @package    AvS_ScopeHint
+ * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @author     Andreas von Studnitz <avs@avs-webentwicklung.de>
+ */
+ -->
 <layout>
     <adminhtml_system_config_edit>
         <reference name="head">
