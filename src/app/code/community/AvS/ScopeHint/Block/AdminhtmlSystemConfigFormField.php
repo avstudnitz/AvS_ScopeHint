@@ -135,6 +135,10 @@ class AvS_ScopeHint_Block_AdminhtmlSystemConfigFormField
      */
     protected function _getConfigCode(Varien_Data_Form_Element_Abstract $element)
     {
+        if (isset($element->field_config->config_path)) {
+            return (string) $element->field_config->config_path;
+        }
+
         $configCode = preg_replace('#\[value\](\[\])?$#', '', $element->getName());
         $configCode = str_replace('[fields]', '', $configCode);
         $configCode = str_replace('groups[', '[', $configCode);
