@@ -76,7 +76,7 @@ class AvS_ScopeHint_Block_AdminhtmlSystemConfigFormField
                         if (is_array($v['value']) && in_array($k, $v['value'])) {
                             $defTextArr[] = $v['label'];
                         }
-                    } elseif ($v['value'] == $defText) {
+                    } elseif (isset($v['value']) && $v['value'] == $defText) {
                         $defTextArr[] = $v['label'];
                         break;
                     }
