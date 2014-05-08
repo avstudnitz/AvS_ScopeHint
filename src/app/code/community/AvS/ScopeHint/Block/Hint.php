@@ -163,18 +163,34 @@ class AvS_ScopeHint_Block_Hint extends Mage_Adminhtml_Block_Abstract
             case 'product':
                 $attributeName = $this->getElement()->getData('name');
                 if (is_null($scope)) {
-                    return (string)$this->_getProduct()->getData($attributeName);
+                    $value = $this->_getProduct()->getData($attributeName);
+                    if (is_array($value)) {
+                        return implode(',', $value);
+                    }
+                    return $value;
                 } else if ($scope instanceof Mage_Core_Model_Store) {
-                    return (string)$this->_getProduct($scope)->getData($attributeName);
+                    $value = $this->_getProduct($scope)->getData($attributeName);
+                    if (is_array($value)) {
+                        return implode(',', $value);
+                    }
+                    return $value;
                 }
                 break;
 
             case 'category':
                 $attributeName = $this->getElement()->getData('name');
                 if (is_null($scope)) {
-                    return (string)$this->_getCategory()->getData($attributeName);
+                    $value = $this->_getCategory()->getData($attributeName);
+                    if (is_array($value)) {
+                        return implode(',', $value);
+                    }
+                    return $value;
                 } else if ($scope instanceof Mage_Core_Model_Store) {
-                    return (string)$this->_getCategory($scope)->getData($attributeName);
+                    $value = $this->_getCategory($scope)->getData($attributeName);
+                    if (is_array($value)) {
+                        return implode(',', $value);
+                    }
+                    return $value;
                 }
                 break;
         }
