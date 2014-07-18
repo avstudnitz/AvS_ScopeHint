@@ -262,7 +262,7 @@ class AvS_ScopeHint_Block_Hint extends Mage_Adminhtml_Block_Abstract
                 return implode(', ', $readableValues);
             } else {
                 foreach($values as $value) {
-                    if ($value['value'] == $rawValue) {
+                    if (isset($value['value']) && $value['value'] == $rawValue) {
                         return $value['label'];
                     }
                 }
