@@ -145,7 +145,54 @@ class AvS_ScopeHint_Block_AdminhtmlSystemConfigFormField
         $configCode = str_replace('][', '/', $configCode);
         $configCode = str_replace(']', '', $configCode);
         $configCode = str_replace('[', '', $configCode);
+        $group = substr($configCode, 0, strpos($configCode, '/'));
+        $field = substr($configCode, strpos($configCode, '/') + 1);
         $configCode = Mage::app()->getRequest()->getParam('section') . '/' . $configCode;
+
+        $configFields   = Mage::getSingleton('adminhtml/config');
+
+        $section = Mage::app()->getRequest()->getParam('section');
+        /** @var Mage_Core_Model_Config_Element $section */
+        $section   = $configFields->getSection($section);
+
+        $groupNode = $section->groups->$group;
+        if (! $groupNode) {
+            return $configCode;
+        }
+        $fieldNode = $groupNode->fields->$field;
+
+        $helperClassName = $configFields->getAttributeModule($section, $groupNode, $fieldNode ?: null);
+        $helper = Mage::helper($helperClassName);
+        if (! $helper) {
+            $moduleName = 'unknown';
+        } else {
+            $helperName = get_class($helper);
+            $moduleName = substr(get_class($helper), 0, strpos($helperName, '_Helper'));
+        }
+
+
+        $rewrites = Mage::getConfig()->getNode()->xpath('//global/helpers//rewrite');
+        $hasRewrite = false;
+        $rewriteHelperClass = null;
+        foreach ($rewrites as $rewrite) {
+            /** @var Mage_Core_Model_Config_Element $rewrite */
+            /** @var Mage_Core_Model_Config_Element $parentNode */
+            $parentNode = $rewrite->getParent();
+            if ($parentNode->getName() == $helperClassName) {
+                $hasRewrite = true;
+                if (isset($parentNode->getParent()->$helperClassName->class)) {
+                    $rewriteHelperClass = $parentNode->getParent()->$helperClassName->class;
+                }
+            }
+        }
+
+        if ($hasRewrite && !$rewriteHelperClass) {
+            $moduleName .= ' < '. 'Mage_'.ucfirst($helperClassName);
+        } elseif($hasRewrite) {
+            $moduleName .= ' < '. substr($rewriteHelperClass, 0, strpos($rewriteHelperClass, '_Helper'));
+        }
+
+        $configCode = $configCode."<br />\n". $moduleName .'';
         return $configCode;
     }
 
