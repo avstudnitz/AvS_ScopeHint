@@ -165,12 +165,18 @@ class AvS_ScopeHint_Block_Hint extends Mage_Adminhtml_Block_Abstract
                 if (is_null($scope)) {
                     $value = $this->_getProduct()->getData($attributeName);
                     if (is_array($value)) {
+                        if (is_array($value[0])) {
+                            return '';
+                        }
                         return implode(',', $value);
                     }
                     return $value;
                 } else if ($scope instanceof Mage_Core_Model_Store) {
                     $value = $this->_getProduct($scope)->getData($attributeName);
                     if (is_array($value)) {
+                        if (is_array($value[0])) {
+                            return '';
+                        }
                         return implode(',', $value);
                     }
                     return $value;
