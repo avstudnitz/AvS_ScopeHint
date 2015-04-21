@@ -72,6 +72,9 @@ class AvS_ScopeHint_Block_AdminhtmlSystemConfigFormField
             if ($options) {
                 $defTextArr = array();
                 foreach ($options as $k => $v) {
+                    if (!isset($v['value'])) {
+                        continue;
+                    }
                     if ($isMultiple) {
                         if (is_array($v['value']) && in_array($k, $v['value'])) {
                             $defTextArr[] = $v['label'];
