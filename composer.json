@@ -3,7 +3,10 @@
    "type": "magento-module",
    "description": "Creates a warning if a configuration setting, product data or category data is overwritten on a lower level (website or store view)",
    "homepage": "https://github.com/avstudnitz/AvS_ScopeHint",
-   "require": {
+   "license": [
+        "OSL-3.0"
+   ],
+   "suggest": {
       "magento-hackathon/magento-composer-installer": "*"
    }
 }
