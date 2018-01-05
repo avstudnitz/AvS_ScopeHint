@@ -94,6 +94,9 @@ Tooltip.prototype = {
 
         this.options = options;
 
+        // Remove newlines from tooltip
+        tool_tip = tool_tip.replace(/(\r\n|\n|\r)/gm,"");
+
         // use the supplied tooltip element or create our own div
         if ($(tool_tip)) {
             this.tool_tip = $(tool_tip);
