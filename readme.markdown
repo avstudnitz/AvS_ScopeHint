@@ -1,4 +1,4 @@
-AvS_ScopeHint
+AvS_ScopeHint for Magento 1
 =====================
 Displays a hint when a configuration value is overwritten on a lower scope (website or store view).
 Works for product and category attributes too (as of v0.3.0)
